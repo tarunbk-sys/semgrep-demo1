@@ -8,7 +8,8 @@ const db = mysql.createConnection({ host: "localhost", user: "root", password: "
 
 app.get("/user", (req, res) => {
   // SQL injection
-  db.query("SELECT * FROM users WHERE id = " + req.query.id, (err, rows) => res.json(rows));
+  const id = req.query.id;
+  db.query(`SELECT * FROM users WHERE id = ${id}`, (err, rows) => res.json(rows));
 });
 
 app.get("/ping", (req, res) => {

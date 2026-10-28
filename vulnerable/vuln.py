@@ -7,7 +7,8 @@ import sqlite3
 import subprocess
 import yaml
 
-API_KEY = "sk_live_1234567890abcdef"  # hardcoded secret
+AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"  # hardcoded secret
+AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 
 
 def get_user(conn: sqlite3.Connection, username: str):
@@ -18,7 +19,7 @@ def get_user(conn: sqlite3.Connection, username: str):
 
 def ping(host: str):
     # Command injection
-    return os.system("ping -c 1 " + host)
+    return os.popen("ping -c 1 " + host).read()
 
 
 def run(cmd: str):
@@ -47,7 +48,7 @@ def hash_password(password: str) -> str:
 
 def new_token() -> str:
     # Predictable randomness
-    return str(random.random())
+    return "".join(random.choice("abcdef0123456789") for _ in range(32))
 
 
 def read_file(name: str):
