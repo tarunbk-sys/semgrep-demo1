@@ -1,12 +1,8 @@
 # semgrep-demo1
 
-Small demo repo for trying out [Semgrep](https://semgrep.dev).
+Python demo for [Semgrep](https://semgrep.dev): a tiny SQLite notes store, written twice.
 
-- `clean/` – safe code that should produce no findings
-- `vulnerable/` – **intentionally insecure** code. Never use it in production.
+- `notes/clean.py` – safe version, should produce no findings
+- `notes/insecure.py` – **intentionally vulnerable**. Never use it in production.
 
-## Run
-
-```sh
-semgrep scan --config auto .
-```
+The GitHub Actions workflow runs `semgrep scan --config auto --error` on every push and PR.
