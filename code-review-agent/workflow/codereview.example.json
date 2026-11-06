@@ -1,0 +1,9 @@
+{
+  "maxFiles": 40,
+  "maxChangedLines": 3000,
+  "maxInputTokens": 60000,
+  "minConfidence": 0.7,
+  "maxComments": 10,
+  "failOn": "blocker",
+  "extraIgnore": ["docs/**", "**/*.md"]
+}

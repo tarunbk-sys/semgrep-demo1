@@ -1,0 +1,40 @@
+name: AI Code Review
+
+# Runs on every push to any branch. Make this job a *required status check*
+# on protected branches (Settings -> Rules) so flawed code can't merge.
+on:
+  push:
+
+permissions:
+  contents: read
+  pull-requests: write   # post/update the summary comment on the branch's open PR
+
+concurrency:
+  group: ai-code-review-${{ github.ref }}
+  cancel-in-progress: true   # a newer push supersedes an in-flight review
+
+jobs:
+  ai-code-review:            # <- this name is what you mark as "required"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.event.deleted == false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # need history for before..after and merge-base
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install reviewer
+        working-directory: .code-review
+        run: npm ci
+
+      - name: Review pushed commits
+        working-directory: .code-review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REVIEW_REPO_DIR: ${{ github.workspace }}
+        run: npx tsx src/index.ts
